@@ -1,0 +1,680 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class HomeGUI implements ActionListener{
+    JPanel cards;
+    final String    HOME_MENU = "Home Menu",
+                    SEARCH_MENU = "Search Menu",
+                    CREATE_MENU = "Create Menu",
+                    CUSTOMER_SEARCH = "Customer Panel",
+                    BOAT_SEARCH = "Boat Panel",
+                    LEASE_SEARCH = "Lease Search",
+                    SERVICE_RECORD_SEARCH = "Service Record Search",
+                    CREATE_CUSTOMER = "Create Customer",
+                    CREATE_LEASE = "Create Lease",
+                    CREATE_SERVICE_RECORD = "Create Service Record";
+
+    public static void main(String args[]){
+        createAndShowGUI();
+    }
+
+    private static void createAndShowGUI(){
+        JFrame frame = new JFrame("Chesapeake Bay Marina");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        HomeGUI gui = new HomeGUI();
+
+        frame.setJMenuBar(gui.createMenuBar());
+        gui.addComponentToPane(frame.getContentPane());
+
+        frame.setSize(400, 400);
+        frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
+    }
+
+    public void addComponentToPane(Container pane){
+        JPanel  homeMenu = homeMenu(),
+                searchMenu = searchMenu(),
+                createCustomer = createCustomer(),
+                createMenu = createMenu(),
+                createServiceRecord = createServiceRecord(),
+                createLease = createLease(),
+                custSearch = custSearch(),
+                boatSearch = boatSearch(),
+                leaseSearch = leaseSearch(),
+                serviceSearch = serviceSearch();
+
+        cards = new JPanel(new CardLayout());
+
+
+        cards.add(homeMenu, HOME_MENU);
+        cards.add(searchMenu, SEARCH_MENU);
+        cards.add(createCustomer, CREATE_CUSTOMER);
+        cards.add(createServiceRecord, CREATE_SERVICE_RECORD);
+        cards.add(createLease, CREATE_LEASE);
+        cards.add(createMenu, CREATE_MENU);
+        cards.add(custSearch, CUSTOMER_SEARCH);
+        cards.add(boatSearch, BOAT_SEARCH);
+        cards.add(leaseSearch, LEASE_SEARCH);
+        cards.add(serviceSearch, SERVICE_RECORD_SEARCH);
+
+        pane.add(cards);
+
+    }
+
+    public JPanel leaseSearch(){
+        JPanel leaseSearch = new JPanel();
+
+        final String    BOATSLOT = "Boat slot",
+                        RATE = "Rate",
+                        EXPIRATIONDATE = "Expiration Date",
+                        DURATION = "Duration",
+                        SLIPNUMBER = "Slip Number";
+
+        JButton back = new JButton("Back"),
+                submit = new JButton("Submit");
+
+        JLabel  slipNum = new JLabel(SLIPNUMBER, SwingConstants.RIGHT),
+                boatSlot = new JLabel(BOATSLOT, SwingConstants.RIGHT),
+                expirationDate = new JLabel(EXPIRATIONDATE, SwingConstants.RIGHT),
+                duration = new JLabel(DURATION, SwingConstants.RIGHT),
+                rate = new JLabel(RATE, SwingConstants.RIGHT);
+
+        JTextField  slipNumTF = new JTextField(25),
+                    boatSlotTF = new JTextField(25),
+                    expirationDateTF = new JTextField(25),
+                    durationTF = new JTextField(25),
+                    rateTF = new JTextField(25);
+
+        back.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, SEARCH_MENU);
+            }
+        });
+
+        leaseSearch.setLayout(new GridLayout(7, 2));
+
+        leaseSearch.add(back);
+        leaseSearch.add(new JLabel());
+
+        leaseSearch.add(slipNum);
+        leaseSearch.add(slipNumTF);
+
+        leaseSearch.add(boatSlot);
+        leaseSearch.add(boatSlotTF);
+
+        leaseSearch.add(expirationDate);
+        leaseSearch.add(expirationDateTF);
+
+        leaseSearch.add(duration);
+        leaseSearch.add(durationTF);
+
+        leaseSearch.add(rate);
+        leaseSearch.add(rateTF);
+
+        leaseSearch.add(submit);
+
+        return leaseSearch;
+    }
+    public JPanel homeMenu(){
+        JPanel homeMenu = new JPanel();
+
+        JButton
+                newBtn = new JButton("New"),
+                financial = new JButton("Financial"),
+                search = new JButton("Search");
+
+        newBtn.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, CREATE_MENU);
+            }
+        });
+        search.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, SEARCH_MENU);
+            }
+        });
+
+        homeMenu.add(newBtn);
+        homeMenu.add(financial);
+        homeMenu.add(search);
+
+        return homeMenu;
+    }
+
+    public JPanel createMenu(){
+        JPanel createMenu = new JPanel();
+
+        JButton back = new JButton("Back"),
+                customer = new JButton("Create a Customer"),
+                lease = new JButton("Create a Lease"),
+                serviceRecord = new JButton("Create a Service Record");
+
+        back.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, HOME_MENU);
+            }
+        });
+
+        customer.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, CREATE_CUSTOMER);
+            }
+        });
+        lease.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, CREATE_LEASE);
+            }
+        });
+        serviceRecord.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, CREATE_SERVICE_RECORD);
+            }
+        });
+
+        createMenu.add(back);
+        createMenu.add(customer);
+        createMenu.add(lease);
+        createMenu.add(serviceRecord);
+
+        return createMenu;
+    }
+
+    public JPanel createCustomer(){
+        JPanel createCustomer = new JPanel();
+
+        final  String   FIRSTNAME = "First Name",
+                LASTNAME = "Last Name",
+                LICENSE = "Boating License Number";
+
+        JButton back = new JButton("Back"),
+                submit = new JButton("Submit");
+
+        JLabel  fName = new JLabel(FIRSTNAME, SwingConstants.RIGHT),
+                lName = new JLabel(LASTNAME, SwingConstants.RIGHT),
+                lic = new JLabel(LICENSE, SwingConstants.RIGHT);
+
+        JTextField  fNameTF = new JTextField(25),
+                lNameTF = new JTextField(25),
+                licTF = new JTextField(25);
+
+        back.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, CREATE_MENU);
+            }
+        });
+
+        createCustomer.setLayout(new GridLayout(5, 2));
+
+        createCustomer.add(back);
+        createCustomer.add(new JLabel());
+
+        createCustomer.add(fName);
+        createCustomer.add(fNameTF);
+
+        createCustomer.add(lName);
+        createCustomer.add(lNameTF);
+
+        createCustomer.add(lic);
+        createCustomer.add(licTF);
+
+        createCustomer.add(submit);
+
+        return createCustomer;
+    }
+
+    public JPanel createLease(){
+        JPanel createLease = new JPanel();
+
+        final String    BOATSLOT = "Boat slot",
+                        RATE = "Rate",
+                        EXPIRATIONDATE = "Expiration Date",
+                        DURATION = "Duration",
+                        SLIPNUMBER = "Slip Number";
+
+        JButton back = new JButton("Back"),
+                submit = new JButton("Submit");
+
+        JLabel  slipNum = new JLabel(SLIPNUMBER, SwingConstants.RIGHT),
+                boatSlot = new JLabel(BOATSLOT, SwingConstants.RIGHT),
+                expirationDate = new JLabel(EXPIRATIONDATE, SwingConstants.RIGHT),
+                duration = new JLabel(DURATION, SwingConstants.RIGHT),
+                rate = new JLabel(RATE, SwingConstants.RIGHT);
+
+        JTextField  slipNumTF = new JTextField(25),
+                boatSlotTF = new JTextField(25),
+                expirationDateTF = new JTextField(25),
+                durationTF = new JTextField(25),
+                rateTF = new JTextField(25);
+
+        back.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, CREATE_MENU);
+            }
+        });
+
+        createLease.setLayout(new GridLayout(7, 2));
+
+        createLease.add(back);
+        createLease.add(new JLabel());
+
+        createLease.add(slipNum);
+        createLease.add(slipNumTF);
+
+        createLease.add(boatSlot);
+        createLease.add(boatSlotTF);
+
+        createLease.add(expirationDate);
+        createLease.add(expirationDateTF);
+
+        createLease.add(duration);
+        createLease.add(durationTF);
+
+        createLease.add(rate);
+        createLease.add(rateTF);
+
+        createLease.add(submit);
+
+        return createLease;
+    }
+    public JPanel createServiceRecord(){
+        JPanel createServiceRecord = new JPanel();
+
+        final String    INVOICENUMBER = "Invoice #",
+                        DATEOFMAINT = "Date of Maintenance",
+                        WORKDONE = "Work Done";
+
+        JButton back = new JButton("Back"),
+                submit = new JButton("Submit");
+
+        JLabel  invoiceNum = new JLabel(INVOICENUMBER, SwingConstants.RIGHT),
+                date = new JLabel(DATEOFMAINT, SwingConstants.RIGHT),
+                workDone = new JLabel(WORKDONE, SwingConstants.RIGHT);
+
+        JTextField  invoiceNumTF = new JTextField(25),
+                dateTF = new JTextField(25);
+
+        JTextArea workDoneTA = new JTextArea(10, 25);
+
+        back.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, CREATE_MENU);
+            }
+        });
+
+        createServiceRecord.setLayout(new GridLayout(5, 2));
+
+        createServiceRecord.add(back);
+        createServiceRecord.add(new JLabel());
+
+        createServiceRecord.add(invoiceNum);
+        createServiceRecord.add(invoiceNumTF);
+
+        createServiceRecord.add(date);
+        createServiceRecord.add(dateTF);
+
+        createServiceRecord.add(workDone);
+        createServiceRecord.add(workDoneTA);
+
+        createServiceRecord.add(submit);
+
+        return createServiceRecord;
+    }
+
+    public JPanel serviceSearch(){
+        JPanel serviceSearch = new JPanel();
+
+        final String    INVOICENUMBER = "Invoice #",
+                        DATEOFMAINT = "Date of Maintenance",
+                        WORKDONE = "Work Done";
+
+        JButton back = new JButton("Back"),
+                submit = new JButton("Submit");
+
+        JLabel  invoiceNum = new JLabel(INVOICENUMBER, SwingConstants.RIGHT),
+                date = new JLabel(DATEOFMAINT, SwingConstants.RIGHT),
+                workDone = new JLabel(WORKDONE, SwingConstants.RIGHT);
+
+        JTextField  invoiceNumTF = new JTextField(25),
+                    dateTF = new JTextField(25);
+
+        JTextArea workDoneTA = new JTextArea(10, 25);
+
+        serviceSearch.setLayout(new GridLayout(5, 2));
+
+        back.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, SEARCH_MENU);
+            }
+        });
+
+        serviceSearch.add(back);
+        serviceSearch.add(new JLabel());
+
+        serviceSearch.add(invoiceNum);
+        serviceSearch.add(invoiceNumTF);
+
+        serviceSearch.add(date);
+        serviceSearch.add(dateTF);
+
+        serviceSearch.add(workDone);
+        serviceSearch.add(workDoneTA);
+
+        serviceSearch.add(submit);
+
+        return serviceSearch;
+    }
+
+    public JPanel boatSearch(){
+
+        JPanel boatSearch = new JPanel();
+
+        final String    REGISTRATIONNUM = "Registration Number",
+                        LENGTH = "Length",
+                        FUELTYPE = "Fuel Type";
+
+        JButton back = new JButton("Back"),
+                submit = new JButton("Submit");
+
+        JLabel  regNum = new JLabel(REGISTRATIONNUM, SwingConstants.RIGHT),
+                length = new JLabel(LENGTH, SwingConstants.RIGHT),
+                fuelType = new JLabel(FUELTYPE, SwingConstants.RIGHT);
+
+        JTextField  regNumTF = new JTextField(25),
+                    lengthTF = new JTextField(25),
+                    fuelTypeTF = new JTextField(25);
+
+        back.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, SEARCH_MENU);
+            }
+        });
+
+        boatSearch.setLayout(new GridLayout(5, 2));
+
+        boatSearch.add(back);
+        boatSearch.add(new JLabel());
+
+        boatSearch.add(regNum);
+        boatSearch.add(regNumTF);
+
+        boatSearch.add(length);
+        boatSearch.add(lengthTF);
+
+        boatSearch.add(fuelType);
+        boatSearch.add(fuelTypeTF);
+
+        boatSearch.add(submit);
+
+        return boatSearch;
+    }
+
+
+
+    public JPanel custSearch(){
+        //----------__Customer Search ---------------
+        JPanel custSearch = new JPanel();
+        final  String   FIRSTNAME = "First Name",
+                        LASTNAME = "Last Name",
+                        LICENSE = "Boating License Number";
+
+        JButton back = new JButton("Back"),
+                submit = new JButton("Submit");
+
+        JLabel  fName = new JLabel(FIRSTNAME, SwingConstants.RIGHT),
+                lName = new JLabel(LASTNAME, SwingConstants.RIGHT),
+                lic = new JLabel(LICENSE, SwingConstants.RIGHT);
+
+        JTextField  fNameTF = new JTextField(25),
+                    lNameTF = new JTextField(25),
+                    licTF = new JTextField(25);
+
+        back.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, SEARCH_MENU);
+            }
+        });
+
+        custSearch.setLayout(new GridLayout(5, 2));
+
+        custSearch.add(back);
+        custSearch.add(new JLabel());
+
+        custSearch.add(fName);
+        custSearch.add(fNameTF);
+
+        custSearch.add(lName);
+        custSearch.add(lNameTF);
+
+        custSearch.add(lic);
+        custSearch.add(licTF);
+
+        custSearch.add(submit);
+
+        return custSearch;
+    }
+
+    public JPanel searchMenu(){
+        JPanel searchMenu = new JPanel();
+        final String    CUSTOMER = "Search by Customer",
+                        LEASE = "Search by Lease",
+                        BOAT = "Search by Boat",
+                        SERVICE = "Search by Service Record";
+
+        JButton back = new JButton("Back"),
+                customer = new JButton(CUSTOMER),
+                lease = new JButton(LEASE),
+                boat = new JButton(BOAT),
+                service = new JButton(SERVICE);
+
+        back.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, HOME_MENU);
+            }
+        });
+
+        customer.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, CUSTOMER_SEARCH);
+            }
+        });
+
+        lease.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, LEASE_SEARCH);
+            }
+        });
+
+        boat.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, BOAT_SEARCH);
+            }
+        });
+
+        service.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, SERVICE_RECORD_SEARCH);
+            }
+        });
+
+
+        searchMenu.add(back);
+        searchMenu.add(customer);
+        searchMenu.add(lease);
+        searchMenu.add(boat);
+        searchMenu.add(service);
+
+        return searchMenu;
+    }
+    public JMenuBar createMenuBar() {
+        JMenuBar menuBar;
+
+        JMenu file,
+                search,
+                financial;
+
+        menuBar = new JMenuBar();
+
+        file = new JMenu("File");
+        search = new JMenu("Search");
+        financial = new JMenu("Financial");
+
+        //-------_File --------------
+        menuBar.add(file);
+
+        JMenuItem createCustomer,
+                createLease,
+                createServiceRecord;
+
+        createCustomer = new JMenuItem("Create New Customer");
+        createLease = new JMenuItem("Create New Lease");
+        createServiceRecord = new JMenuItem("Create Service Record");
+
+        createCustomer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, CREATE_CUSTOMER);
+            }
+        });
+        createLease.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, CREATE_LEASE);
+            }
+        });
+        createServiceRecord.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, CREATE_SERVICE_RECORD);
+            }
+        });
+
+        file.add(createCustomer);
+        file.add(createLease);
+        file.add(createServiceRecord);
+
+        //------- Search ------------
+        menuBar.add(search);
+
+        JMenuItem customer,
+                lease,
+                boat,
+                maintenance;
+
+        customer = new JMenuItem("By Customer");
+        lease = new JMenuItem("By Lease");
+        boat = new JMenuItem("By Boat");
+        maintenance = new JMenuItem("By Maintenance");
+
+        customer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, CUSTOMER_SEARCH);
+            }
+        });
+
+        boat.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, BOAT_SEARCH);
+            }
+        });
+        lease.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, LEASE_SEARCH);
+            }
+        });
+
+        maintenance.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                CardLayout cl = (CardLayout)(cards.getLayout());
+                cl.show(cards, SERVICE_RECORD_SEARCH);
+            }
+        });
+
+        search.add(customer);
+        search.add(lease);
+        search.add(boat);
+        search.add(maintenance);
+
+        //------- Payment ---------
+        menuBar.add(financial);
+
+        //Billing submenu
+        JMenu createBill = new JMenu("Create A Bill");
+
+        JMenuItem leaseBill,
+                serviceBill;
+
+        leaseBill = new JMenu("Lease Bill");
+        serviceBill = new JMenu("Service Bill");
+
+        createBill.add(leaseBill);
+        createBill.add(serviceBill);
+
+        JMenuItem recordPayment,
+                lateNotice,
+                accountsReceivable;
+
+        recordPayment = new JMenuItem("Record Payment");
+        lateNotice = new JMenuItem("Late Notices");
+        accountsReceivable = new JMenuItem("Accounts Receivable");
+        //Make a submenu for leases and boat services
+
+        financial.add(createBill);
+        financial.add(recordPayment);
+        financial.add(lateNotice);
+        financial.add(accountsReceivable);
+
+        return menuBar;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+    }
+}
+
