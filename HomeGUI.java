@@ -1,19 +1,28 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.sql.*;
 
 public class HomeGUI implements ActionListener{
     JPanel cards;
     final String    HOME_MENU = "Home Menu",
                     SEARCH_MENU = "Search Menu",
                     CREATE_MENU = "Create Menu",
+                    FINANCIAL_MENU = "Financial Menu",				//newly added
                     CUSTOMER_SEARCH = "Customer Panel",
                     BOAT_SEARCH = "Boat Panel",
                     LEASE_SEARCH = "Lease Search",
                     SERVICE_RECORD_SEARCH = "Service Record Search",
                     CREATE_CUSTOMER = "Create Customer",
                     CREATE_LEASE = "Create Lease",
-                    CREATE_SERVICE_RECORD = "Create Service Record";
+                    CREATE_SERVICE_RECORD = "Create Service Record",
+                    CREATE_PAYMENT = "Create Payment";				//newly added
+    
+    //search by customer
+    static ResultSet rSet;
+    static PreparedStatement searchCustByName;
+    static PreparedStatement searchCustByLicense;
+    
 
     public static void main(String args[]){
         createAndShowGUI();
@@ -36,6 +45,7 @@ public class HomeGUI implements ActionListener{
     public void addComponentToPane(Container pane){
         JPanel  homeMenu = homeMenu(),
                 searchMenu = searchMenu(),
+                financialMenu = FinancialMenu(),		//newly added
                 createCustomer = createCustomer(),
                 createMenu = createMenu(),
                 createServiceRecord = createServiceRecord(),
@@ -43,13 +53,15 @@ public class HomeGUI implements ActionListener{
                 custSearch = custSearch(),
                 boatSearch = boatSearch(),
                 leaseSearch = leaseSearch(),
-                serviceSearch = serviceSearch();
+                serviceSearch = serviceSearch(), 
+                createPayment = createPayment(); 
 
         cards = new JPanel(new CardLayout());
 
 
         cards.add(homeMenu, HOME_MENU);
         cards.add(searchMenu, SEARCH_MENU);
+        cards.add(financialMenu, FINANCIAL_MENU);	//newly added
         cards.add(createCustomer, CREATE_CUSTOMER);
         cards.add(createServiceRecord, CREATE_SERVICE_RECORD);
         cards.add(createLease, CREATE_LEASE);
@@ -58,6 +70,7 @@ public class HomeGUI implements ActionListener{
         cards.add(boatSearch, BOAT_SEARCH);
         cards.add(leaseSearch, LEASE_SEARCH);
         cards.add(serviceSearch, SERVICE_RECORD_SEARCH);
+        cards.add(createPayment, CREATE_PAYMENT);
 
         pane.add(cards);
 
@@ -141,6 +154,13 @@ public class HomeGUI implements ActionListener{
                 cl.show(cards, SEARCH_MENU);
             }
         });
+        financial.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				CardLayout cl = (CardLayout)(cards.getLayout());
+				cl.show(cards, FINANCIAL_MENU);
+			}
+        });
 
         homeMenu.add(newBtn);
         homeMenu.add(financial);
@@ -199,8 +219,8 @@ public class HomeGUI implements ActionListener{
         JPanel createCustomer = new JPanel();
 
         final  String   FIRSTNAME = "First Name",
-                LASTNAME = "Last Name",
-                LICENSE = "Boating License Number";
+                		LASTNAME = "Last Name",
+                		LICENSE = "Boating License Number";
 
         JButton back = new JButton("Back"),
                 submit = new JButton("Submit");
@@ -296,6 +316,7 @@ public class HomeGUI implements ActionListener{
 
         return createLease;
     }
+    
     public JPanel createServiceRecord(){
         JPanel createServiceRecord = new JPanel();
 
@@ -340,6 +361,57 @@ public class HomeGUI implements ActionListener{
         createServiceRecord.add(submit);
 
         return createServiceRecord;
+    }
+    
+    public JPanel createPayment(){
+    	JPanel createPayment = new JPanel();
+    	
+    	JButton backBtn = new JButton("Back"),
+    			paymentBtn = new JButton("Make Payment");
+    	
+    	JLabel	nameLbl = new JLabel("Name on card:"),
+    			numLbl = new JLabel("Card Number:"),
+    			securityLbl = new JLabel("Security Code:"),
+    			dateLbl = new JLabel("Expiration Date:"),
+    			totalLbl = new JLabel("Total Amount Due: $0.00");	//change this later to reflect actual cost
+    			
+    	JTextField  nameField = new JTextField(12),
+    				numField = new JTextField(12),
+    				securityField = new JTextField(12),
+    				dateField = new JTextField(12);
+    	
+    	createPayment.setLayout(new GridLayout(6,2));
+    	
+    	createPayment.add(new JLabel());
+    	createPayment.add(backBtn);
+    	
+    	createPayment.add(nameLbl);
+    	createPayment.add(nameField);
+    	
+    	createPayment.add(numLbl);
+    	createPayment.add(numField);
+    	
+    	createPayment.add(securityLbl);
+    	createPayment.add(securityField);
+    	
+    	createPayment.add(dateLbl);
+    	createPayment.add(dateField);
+    	
+    	createPayment.add(totalLbl);
+    	createPayment.add(paymentBtn);
+    	
+    	//add action listeners
+    	backBtn.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				CardLayout cl = (CardLayout)(cards.getLayout());
+				cl.show(cards, FINANCIAL_MENU);
+			}		
+    	});
+    	
+    	//add action listener for make payment button...
+    	
+    	return createPayment;
     }
 
     public JPanel serviceSearch(){
@@ -461,6 +533,34 @@ public class HomeGUI implements ActionListener{
                 cl.show(cards, SEARCH_MENU);
             }
         });
+        
+        submit.addActionListener(new ActionListener(){					//newly added
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+		        //for database connection
+		        try{
+		        	Connection connection = DriverManager.getConnection("jdbc:ucanaccess://C:/Users/Batman/Documents/Marina DB.accdb");
+		        	System.out.println("Connection successfully established to Database");
+		        	
+		        	searchCustByName = connection.prepareStatement("SELECT FirstName, LastName, BoatingLicense FROM Customer WHERE FirstName = ? and LastName = ?");
+		        	
+		        	searchCustByName.setString(1, fNameTF.getText());
+		        	searchCustByName.setString(2, lNameTF.getText());
+		        	
+		        	rSet = searchCustByName.executeQuery();
+		        	
+		        	while(rSet.next()){
+		        		String firstN = rSet.getString(1);
+		        		String lastN = rSet.getString(2);
+		        		System.out.println(firstN);
+		        		System.out.println(lastN);
+		        	}
+		        }
+		        catch(Exception e){
+		        	JOptionPane.showMessageDialog(null, e.getMessage());
+		        }
+			} 	
+        });
 
         custSearch.setLayout(new GridLayout(5, 2));
 
@@ -543,6 +643,7 @@ public class HomeGUI implements ActionListener{
 
         return searchMenu;
     }
+    
     public JMenuBar createMenuBar() {
         JMenuBar menuBar;
 
@@ -670,6 +771,35 @@ public class HomeGUI implements ActionListener{
         financial.add(accountsReceivable);
 
         return menuBar;
+    }
+    
+    //--------financial--------
+    public JPanel FinancialMenu(){							//newly added
+    	JPanel financialMenu = new JPanel();
+    	
+    	JButton paymentBtn = new JButton("Make A Payment"),
+    			backBtn = new JButton("Back");
+    	
+    	backBtn.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+    			CardLayout cl = (CardLayout)(cards.getLayout());
+    			cl.show(cards, HOME_MENU);
+			}
+    	});
+    	
+    	paymentBtn.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				CardLayout cl = (CardLayout)(cards.getLayout());
+				cl.show(cards, CREATE_PAYMENT);
+			}    		
+    	});
+    	
+    	financialMenu.add(backBtn);
+    	financialMenu.add(paymentBtn);
+    	
+    	return financialMenu;
     }
 
     @Override
