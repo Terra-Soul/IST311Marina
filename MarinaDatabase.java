@@ -169,10 +169,10 @@ public class MarinaDatabase {
             addNewLease = connection.prepareStatement("INSERT INTO LEASE(slipNumber, slotNumber, duration, rate, expirationDate) VALUES(?, ?, ?, ?, ?)");
 
             addNewLease.setInt(1, slotNumber);
-            addNewLease.setInt(1, slotNumber);
-            addNewLease.setInt(1, duration);
-            addNewLease.setDouble(2, rate);
-            addNewLease.setString(3, expirationDate);
+            addNewLease.setInt(2, slotNumber);
+            addNewLease.setInt(3, duration);
+            addNewLease.setDouble(4, rate);
+            addNewLease.setString(5, expirationDate);
             
             System.out.println("Lease Created!");
             int ans = addNewLease.executeUpdate();
