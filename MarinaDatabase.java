@@ -56,4 +56,65 @@ public class MarinaDatabase {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
+    
+    public void addNewPowerBoat(int license, String fName, String lName){
+        try{
+            addNewCust = connection.prepareStatement("INSERT INTO CUSTOMER(boatingLicense, firstName, lastName) VALUES(?, ?, ?)");
+
+            addNewCust.setInt(1, license);
+            addNewCust.setString(2, fName);
+            addNewCust.setString(3, lName);
+
+            System.out.println("Customer added!");
+            int ans = addNewCust.executeUpdate();
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    public void addNewCust(int license, String fName, String lName){
+        try{
+            addNewCust = connection.prepareStatement("INSERT INTO CUSTOMER(boatingLicense, firstName, lastName) VALUES(?, ?, ?)");
+
+            addNewCust.setInt(1, license);
+            addNewCust.setString(2, fName);
+            addNewCust.setString(3, lName);
+
+            System.out.println("Customer added!");
+            int ans = addNewCust.executeUpdate();
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    public void addNewCust(int license, String fName, String lName){
+        try{
+            addNewCust = connection.prepareStatement("INSERT INTO CUSTOMER(boatingLicense, firstName, lastName) VALUES(?, ?, ?)");
+
+            addNewCust.setInt(1, license);
+            addNewCust.setString(2, fName);
+            addNewCust.setString(3, lName);
+
+            System.out.println("Customer added!");
+            int ans = addNewCust.executeUpdate();
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    public void addNewCust(int license, String fName, String lName){
+        try{
+            addNewCust = connection.prepareStatement("INSERT INTO CUSTOMER(boatingLicense, firstName, lastName) VALUES(?, ?, ?)");
+
+            addNewCust.setInt(1, license);
+            addNewCust.setString(2, fName);
+            addNewCust.setString(3, lName);
+
+            System.out.println("Customer added!");
+            int ans = addNewCust.executeUpdate();
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
 }
