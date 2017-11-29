@@ -19,7 +19,7 @@ public class HomeGUI implements ActionListener{
                     CREATE_PAYMENT = "Create Payment";				//newly added
 
 
-    private  MarinaDatabase db = new MarinaDatabase();
+    MarinaDatabase db = new MarinaDatabase();
     //search by customer
     static ResultSet result = null;
     
@@ -552,9 +552,9 @@ public class HomeGUI implements ActionListener{
                 result = db.searchCustByName(fNameTF.getText(), lNameTF.getText());
                 try {
                     while (result.next()) {
-                        fNameTF.setText(result.getString(1));
-                        lNameTF.setText(result.getString(2));
-                        licTF.setText(Integer.toString(result.getInt("BoatingLicense")));
+                        fNameTF.setText(result.getString("firstName"));
+                        lNameTF.setText(result.getString("lastName"));
+                        licTF.setText(Integer.toString(result.getInt("boatingLicense")));
                     }
                 }
                 catch(SQLException e){

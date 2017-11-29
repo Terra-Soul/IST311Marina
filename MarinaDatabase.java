@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.sql.*;
 
 public class MarinaDatabase {
-    static final String DATABASE_URL = "jdbc:ucanaccess://V:/Desktop/Company.accdb"; //jdbc:ucanaccess://X:My Documents/Company.accdb
+    static final String DATABASE_URL = "jdbc:ucanaccess://C:/Users/ambergholson/Desktop/Marina.accdb";
     Connection connection = null;
     Statement statement = null;
     ResultSet rSet = null;
@@ -12,7 +12,7 @@ public class MarinaDatabase {
 
     public MarinaDatabase(){
         try{
-            Connection connection = DriverManager.getConnection(DATABASE_URL);
+            connection = DriverManager.getConnection(DATABASE_URL);
             System.out.println("Made a connection to the database");
         }
         catch (SQLException e) {
@@ -23,8 +23,8 @@ public class MarinaDatabase {
     public ResultSet searchCustByName(String fName, String lName) {
         try
         {
-
-            searchCustByName = connection.prepareStatement("SELECT FirstName, LastName, BoatingLicense FROM Customer WHERE FirstName = ? and LastName = ?");
+            searchCustByName = connection.prepareStatement(
+                    "SELECT firstName, lastName, boatingLicense FROM Customer WHERE firstName = ? AND lastName = ?");
 
             searchCustByName.setString(1, fName);
             searchCustByName.setString(2, lName);
@@ -35,6 +35,7 @@ public class MarinaDatabase {
         }
         catch(Exception e)
         {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(null, e.getMessage());
             return rSet;
         }
@@ -44,6 +45,11 @@ public class MarinaDatabase {
         try{
             addNewCust = connection.prepareStatement("INSERT INTO CUSTOMER(boatingLicense, firstName, lastName) VALUES(?, ?, ?)");
 
+            addNewCust.setInt(1, license);
+            addNewCust.setString(2, fName);
+            addNewCust.setString(3, lName);
+
+            System.out.println("Customer added!");
             int ans = addNewCust.executeUpdate();
         }
         catch(Exception e){
