@@ -17,13 +17,11 @@ public class HomeGUI implements ActionListener{
                     CREATE_LEASE = "Create Lease",
                     CREATE_SERVICE_RECORD = "Create Service Record",
                     CREATE_PAYMENT = "Create Payment";				//newly added
-    
+
+
+    private  MarinaDatabase db = new MarinaDatabase();
     //search by customer
-    static ResultSet rSet;
-    static PreparedStatement searchCustByName;
-    static PreparedStatement searchCustByLicense;	//still need to add
-    static PreparedStatement addNewCust;
-    static PreparedStatement addNewLease;			//still need to add
+    static ResultSet result = null;
     
 
     public static void main(String args[]){
@@ -242,27 +240,16 @@ public class HomeGUI implements ActionListener{
                 cl.show(cards, CREATE_MENU);
             }
         });
-        
+
         submit.addActionListener(new ActionListener(){					//newly added
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try{
-		        	Connection connection = DriverManager.getConnection("jdbc:ucanaccess://C:/Users/Batman/Documents/Marina.accdb");
-		        	System.out.println("Connection successfully established to Database");	//for debugging purposes 
-		        	
-		        	addNewCust = connection.prepareStatement("INSERT INTO CUSTOMER(boatingLicense, firstName, lastName) VALUES(?, ?, ?)");
-		        	
-		        	addNewCust.setString(1, licTF.getText());
-		        	addNewCust.setString(2, fNameTF.getText());
-		        	addNewCust.setString(3, lNameTF.getText());
-		        	
-		        	int ans = addNewCust.executeUpdate();
-				}
-				
-				catch(SQLException sqlex){
-		        	JOptionPane.showMessageDialog(null, sqlex.getMessage(), "Something went wrong" , JOptionPane.ERROR_MESSAGE);
-				}
-			}        	
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int license = Integer.parseInt(licTF.getText());
+                String fName = fNameTF.getText();
+                String lName = lNameTF.getText();
+
+                db.addNewCust(license, fName, lName);
+            }
         });
 
         createCustomer.setLayout(new GridLayout(5, 2));
@@ -562,34 +549,18 @@ public class HomeGUI implements ActionListener{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 		        //for database connection
-		        try{
-		        	Connection connection = DriverManager.getConnection("jdbc:ucanaccess://C:/Users/Batman/Documents/Marina.accdb");
-		        	System.out.println("Connection successfully established to Database");	//for debugging purposes only
-		        	
-		        	//search by boating license
-		        	
-		        	//Be sure to add this feature!!
-		        	
-		        	//search by first and last name
-		        	searchCustByName = connection.prepareStatement("SELECT boatingLicense, firstName, lastName FROM Customer WHERE firstName = ? and lastName = ?");
-		        	
-		        	searchCustByName.setString(1, fNameTF.getText());
-		        	searchCustByName.setString(2, lNameTF.getText());
-		        	
-		        	rSet = searchCustByName.executeQuery();
-		        	
-		        	while(rSet.next()){
-		        		int boatLicense = rSet.getInt(1);
-		        		String firstN = rSet.getString(2);
-		        		String lastN = rSet.getString(3);
-		        		System.out.println(firstN);
-		        		System.out.println(lastN);
-		        		System.out.println(boatLicense);
-		        	}
-		        }
-		        catch(SQLException sqlex){
-		        	JOptionPane.showMessageDialog(null, sqlex.getMessage(), "Something went wrong" , JOptionPane.ERROR_MESSAGE);
-		        }
+                result = db.searchCustByName(fNameTF.getText(), lNameTF.getText());
+                try {
+                    while (result.next()) {
+                        fNameTF.setText(result.getString(1));
+                        lNameTF.setText(result.getString(2));
+                        licTF.setText(Integer.toString(result.getInt("BoatingLicense")));
+                    }
+                }
+                catch(SQLException e){
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "No Reults from Search", JOptionPane.ERROR_MESSAGE);
+                }
+
 			} 	
         });
 
