@@ -24,7 +24,7 @@ public class MarinaDatabase {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
     public ResultSet searchCustByName(String fName, String lName) {
         try
         {
@@ -45,7 +45,70 @@ public class MarinaDatabase {
             return rSet;
         }
     }
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+    public ResultSet searchCustByName(String fName, String lName) {
+        try
+        {
+            searchCustByName = connection.prepareStatement(
+                    "SELECT firstName, lastName, boatingLicense FROM Customer WHERE firstName = ? AND lastName = ?");
 
+            searchCustByName.setString(1, fName);
+            searchCustByName.setString(2, lName);
+
+            rSet = searchCustByName.executeQuery();
+
+            return rSet;
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            return rSet;
+        }
+    }
+///////////////////////////////////////////////////////////////////////////////////////////////////////    
+    public ResultSet searchCustByName(String fName, String lName) {
+        try
+        {
+            searchCustByName = connection.prepareStatement(
+                    "SELECT firstName, lastName, boatingLicense FROM Customer WHERE firstName = ? AND lastName = ?");
+
+            searchCustByName.setString(1, fName);
+            searchCustByName.setString(2, lName);
+
+            rSet = searchCustByName.executeQuery();
+
+            return rSet;
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            return rSet;
+        }
+    }
+///////////////////////////////////////////////////////////////////////////////////////////////////////    
+    public ResultSet searchCustByName(String fName, String lName) {
+        try
+        {
+            searchCustByName = connection.prepareStatement(
+                    "SELECT firstName, lastName, boatingLicense FROM Customer WHERE firstName = ? AND lastName = ?");
+
+            searchCustByName.setString(1, fName);
+            searchCustByName.setString(2, lName);
+
+            rSet = searchCustByName.executeQuery();
+
+            return rSet;
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            return rSet;
+        }
+    }
+///////////////////////////////////////// ADDS////////////////////////////////////////////////////////////////////////
     public void addNewCust(int license, String fName, String lName){
         try{
             addNewCust = connection.prepareStatement("INSERT INTO CUSTOMER(boatingLicense, firstName, lastName) VALUES(?, ?, ?)");
@@ -61,13 +124,13 @@ public class MarinaDatabase {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
-    
-    public void addNewPowerBoat(int registrationNum, int size, String fuelType, int numEngines, String engineType){
+///////////////////////////////////////////////////////////////////////////////////////////////////////    
+    public void addNewPowerBoat(int registrationNum, double size, String fuelType, int numEngines, String engineType){
         try{
             addNewPowerBoat = connection.prepareStatement("INSERT INTO POWERBOAT(registrationNum, size, fuelType, numEngines, engineType) VALUES(?, ?, ?, ?, ?)");
 
             addNewPowerBoat.setInt(1, registrationNum);
-            addNewPowerBoat.setInt(2, size);
+            addNewPowerBoat.setDouble(2, size);
             addNewPowerBoat.setString(3, fuelType);
             addNewPowerBoat.setInt(4, numEngines);
             addNewPowerBoat.setString(5, engineType);
@@ -80,14 +143,15 @@ public class MarinaDatabase {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
-    public void addNewSailBoat(int registrationNum, int size, String fuelType, int keelHeight, boolean hasEngine, int sailNum){
+///////////////////////////////////////////////////////////////////////////////////////////////////////    
+    public void addNewSailBoat(int registrationNum, double size, String fuelType, double keelHeight, boolean hasEngine, int sailNum){
         try{
             addNewSailBoat = connection.prepareStatement("INSERT INTO SAILBOAT(registrationNum, size, fuelType, keelHeight, hasEngine, sailNum) VALUES(?, ?, ?, ?, ?, ?)");
 
             addNewSailBoat.setInt(1, registrationNum);
-            addNewSailBoatt.setInt(2, size);
+            addNewSailBoatt.setDouble(2, size);
             addNewSailBoat.setString(3, fuelType);
-            addNewSailBoat.setInt(4, keelHeight);
+            addNewSailBoat.setDouble(4, keelHeight);
             addNewSailBoat.setBoolean(5, hasEngine);
             addNewSailBoat.setInt(6, sailNum);
            
@@ -99,6 +163,7 @@ public class MarinaDatabase {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
+///////////////////////////////////////////////////////////////////////////////////////////////////////    
     public void addNewLease(int slipNumber, int slotNumber, int duration, double rate, String expirationDate){
         try{
             addNewLease = connection.prepareStatement("INSERT INTO LEASE(slipNumber, slotNumber, duration, rate, expirationDate) VALUES(?, ?, ?, ?, ?)");
@@ -119,6 +184,7 @@ public class MarinaDatabase {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
+///////////////////////////////////////////////////////////////////////////////////////////////////////    
     public void addNewMaintenance(int invoiceNum, String dateOfMaintenance, String workDone){
         try{
             addNewMaintenance = connection.prepareStatement("INSERT INTO MAINTENANCE(invoiceNum, dateOfMaintenance, workDone) VALUES(?, ?, ?)");
