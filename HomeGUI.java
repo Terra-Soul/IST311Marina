@@ -21,7 +21,9 @@ public class HomeGUI implements ActionListener{
     //search by customer
     static ResultSet rSet;
     static PreparedStatement searchCustByName;
-    static PreparedStatement searchCustByLicense;
+    static PreparedStatement searchCustByLicense;	//still need to add
+    static PreparedStatement addNewCust;
+    static PreparedStatement addNewLease;			//still need to add
     
 
     public static void main(String args[]){
@@ -239,6 +241,28 @@ public class HomeGUI implements ActionListener{
                 CardLayout cl = (CardLayout)(cards.getLayout());
                 cl.show(cards, CREATE_MENU);
             }
+        });
+        
+        submit.addActionListener(new ActionListener(){					//newly added
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try{
+		        	Connection connection = DriverManager.getConnection("jdbc:ucanaccess://C:/Users/Batman/Documents/Marina.accdb");
+		        	System.out.println("Connection successfully established to Database");	//for debugging purposes 
+		        	
+		        	addNewCust = connection.prepareStatement("INSERT INTO CUSTOMER(boatingLicense, firstName, lastName) VALUES(?, ?, ?)");
+		        	
+		        	addNewCust.setString(1, licTF.getText());
+		        	addNewCust.setString(2, fNameTF.getText());
+		        	addNewCust.setString(3, lNameTF.getText());
+		        	
+		        	int ans = addNewCust.executeUpdate();
+				}
+				
+				catch(SQLException sqlex){
+		        	JOptionPane.showMessageDialog(null, sqlex.getMessage(), "Something went wrong" , JOptionPane.ERROR_MESSAGE);
+				}
+			}        	
         });
 
         createCustomer.setLayout(new GridLayout(5, 2));
@@ -539,10 +563,15 @@ public class HomeGUI implements ActionListener{
 			public void actionPerformed(ActionEvent arg0) {
 		        //for database connection
 		        try{
-		        	Connection connection = DriverManager.getConnection("jdbc:ucanaccess://C:/Users/Batman/Documents/Marina DB.accdb");
-		        	System.out.println("Connection successfully established to Database");
+		        	Connection connection = DriverManager.getConnection("jdbc:ucanaccess://C:/Users/Batman/Documents/Marina.accdb");
+		        	System.out.println("Connection successfully established to Database");	//for debugging purposes only
 		        	
-		        	searchCustByName = connection.prepareStatement("SELECT FirstName, LastName, BoatingLicense FROM Customer WHERE FirstName = ? and LastName = ?");
+		        	//search by boating license
+		        	
+		        	//Be sure to add this feature!!
+		        	
+		        	//search by first and last name
+		        	searchCustByName = connection.prepareStatement("SELECT boatingLicense, firstName, lastName FROM Customer WHERE firstName = ? and lastName = ?");
 		        	
 		        	searchCustByName.setString(1, fNameTF.getText());
 		        	searchCustByName.setString(2, lNameTF.getText());
@@ -550,14 +579,16 @@ public class HomeGUI implements ActionListener{
 		        	rSet = searchCustByName.executeQuery();
 		        	
 		        	while(rSet.next()){
-		        		String firstN = rSet.getString(1);
-		        		String lastN = rSet.getString(2);
+		        		int boatLicense = rSet.getInt(1);
+		        		String firstN = rSet.getString(2);
+		        		String lastN = rSet.getString(3);
 		        		System.out.println(firstN);
 		        		System.out.println(lastN);
+		        		System.out.println(boatLicense);
 		        	}
 		        }
-		        catch(Exception e){
-		        	JOptionPane.showMessageDialog(null, e.getMessage());
+		        catch(SQLException sqlex){
+		        	JOptionPane.showMessageDialog(null, sqlex.getMessage(), "Something went wrong" , JOptionPane.ERROR_MESSAGE);
 		        }
 			} 	
         });
